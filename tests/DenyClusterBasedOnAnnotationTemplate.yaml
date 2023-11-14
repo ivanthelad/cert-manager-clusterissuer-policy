@@ -1,0 +1,38 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: denyclusterissuerbasedonannotation
+spec:
+  crd:
+    spec:
+      names:
+        kind: DenyClusterIssuerBasedOnAnnotation
+      validation:
+        openAPIV3Schema:
+          properties:
+            issuer:
+              type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sdenyclusterissuer
+
+        violation[{"msg": msg, "details": {"issuer_name": issuer_name, "allowed_namespaces": allowedNamespaces}}] {
+          input.review.kind.kind == "Certificate"
+          issuer_name := input.review.object.spec.issuerRef.name
+          ns := input.review.object.metadata.namespace
+
+          ci := data.inventory.cluster["cert-manager.io/v1"]["ClusterIssuer"][issuer_name]
+          annotations := ci.metadata.annotations
+          allowedNamespaces := json.unmarshal(annotations.allowedNamespaces)
+
+          ##not issuer_name != allowedNamespaces[_]
+          ## this will be true indicating a violation 
+          not contains(allowedNamespaces, ns)
+
+          msg := sprintf("Issuer name %v is not allowed in ClusterIssuer's annotations", [issuer_name])
+        }
+        # Helper function to check if an array contains a value
+        contains(arr, val) {
+          arr[_] == val
+        }

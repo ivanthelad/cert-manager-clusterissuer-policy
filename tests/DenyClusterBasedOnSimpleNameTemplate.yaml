@@ -37,26 +37,6 @@ spec:
         get_violation_message(issuer, review) = msg {
             msg := sprintf("Certificate  <%v> in your <%v> does not user the right issuer <%v> ", [review.object.metadata.name, review.object.metadata.namespace, issuer])
         }
-        violation[{"msg": msg, "details": {"cert_namespace": input.metadata.namespace, "allowed_namespaces": allowedNamespaces}}] {
-            input.apiVersion == "cert-manager.io/v1"
-            input.kind == "Certificate"
-            input.spec.issuerRef.kind == "ClusterIssuer"
-            # data.inventory.cluster["cert-manager.io"]["ClusterIssuer"]  
-            # Fetch the allowed namespaces defined in annotations in ClusterIssuer
-            ci := data.inventory.cluster["cert-manager.io"]["ClusterIssuer"]
-            ci.metadata.name == input.spec.issuerRef.name
-            annotations := ci.metadata.annotations.allowedNamespaces
-                 =(default, dev, int, mytest)
-            Certificate.dev 
-                  
-
-            allowedNamespaces := split(annotations, ",")
-            input.metadata.namespace != ""  # Ensure the Certificate has a namespace
-
-            # Check if the Certificate's namespace is allowed based on ClusterIssuer annotations
-            not input.metadata.namespace == allowedNamespaces[_]
-            msg := sprintf("Certificate namespace %v is not allowed in ClusterIssuer's annotations", [input.metadata.namespace])
-        }
         violation[{"msg": msg}] {
           cert := input.review.object
           issuer := cert.spec.issuerRef.name

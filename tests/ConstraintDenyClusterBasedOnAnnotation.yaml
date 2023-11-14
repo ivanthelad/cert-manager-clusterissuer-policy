@@ -1,0 +1,11 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: DenyClusterIssuerBasedOnAnnotation
+metadata:
+  name: deny-cluster-issuer-annotation
+spec:
+  match:
+    kinds:
+      - apiGroups: ["cert-manager.io"]
+        kinds: ["Certificate"]
+  parameters:
+    issuer: gatekeeper
