@@ -1,0 +1,50 @@
+{
+    "kind": "AdmissionReview",
+    "request": {
+        
+            "apiVersion": "cert-manager.io/v1",
+            "kind": "Certificate",
+            "metadata": {
+                "annotations": {
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"cert-manager.io/v1\",\"kind\":\"Certificate\",\"metadata\":{\"annotations\":{},\"name\":\"my-selfsigned-ca\",\"namespace\":\"default\"},\"spec\":{\"commonName\":\"my-selfsigned-ca\",\"isCA\":true,\"issuerRef\":{\"group\":\"cert-manager.io\",\"kind\":\"ClusterIssuer\",\"name\":\"selfsigned-cluster-issuer\"},\"privateKey\":{\"algorithm\":\"ECDSA\",\"size\":256},\"secretName\":\"root-secret\"}}\n"
+                },
+                "creationTimestamp": "2023-11-13T10:43:14Z",
+                "generation": 2,
+                "name": "my-selfsigned-ca",
+                "namespace": "default",
+                "resourceVersion": "11138",
+                "uid": "1339def3-39c9-4eb7-8dc1-4fb93e9ac17e"
+            },
+            "spec": {
+                "commonName": "my-selfsigned-ca",
+                "isCA": true,
+                "issuerRef": {
+                    "group": "cert-manager.io",
+                    "kind": "ClusterIssuer",
+                    "name": "selfsigned-cluster-issuer"
+                },
+                "privateKey": {
+                    "algorithm": "ECDSA",
+                    "size": 256
+                },
+                "secretName": "root-secret"
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2023-11-13T10:47:03Z",
+                        "message": "Certificate is up to date and has not expired",
+                        "observedGeneration": 2,
+                        "reason": "Ready",
+                        "status": "True",
+                        "type": "Ready"
+                    }
+                ],
+                "notAfter": "2024-02-11T10:47:03Z",
+                "notBefore": "2023-11-13T10:47:03Z",
+                "renewalTime": "2024-01-12T10:47:03Z",
+                "revision": 1
+            }
+        }
+    
+    }

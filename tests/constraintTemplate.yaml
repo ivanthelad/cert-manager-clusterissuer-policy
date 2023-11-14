@@ -1,0 +1,52 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: denyclusterissuer
+  annotations:
+    metadata.gatekeeper.sh/title: "Prevent other cluster issuers from being used"
+    
+spec:
+  crd:
+    spec:
+      names:
+        kind: DenyClusterIssuer
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            message:
+              type: string
+
+
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+
+        package denyclusterissuer
+        allow {
+          input.request.kind.kind == "Certificate"
+          input.request.kind.group == "cert-manager.io"
+          input.request.operation == "CREATE"
+          input.request.resource.kind == "Certificate"
+          input.request.resource.group == "cert-manager.io"
+          input.request.resource.namespace == "default"
+          input.request.resource.apiVersion == "cert-manager.io/v1"
+          input.request.resource.name == "selfsigned-cluster-issuer"
+        }
+
+        get_violation_message(issuer, review) = msg {
+            msg := sprintf("Certificate  <%v> in your <%v> does not user the right issuer <%v> ", [review.object.metadata.name, review.object.metadata.namespace, issuer])
+        }
+        violation[{"msg": msg}] {
+          cert := input.review.object
+          issuer := cert.spec.issuerRef.name
+          issuer_kind := cert.spec.issuerRef.kind
+
+          issuer_group := cert.spec.issuerRef.group
+          issuer != "selfsigned-cluster-issuer"
+          msg := get_violation_message(issuer, input.review)
+
+        }
+
+       
+       
