@@ -2,6 +2,20 @@ apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
   name: denyclusterissuerbasedonannotation
+  annotations:
+    metadata.gatekeeper.sh/title: "Deny unauthorized ClusterIssuers"
+    metadata.gatekeeper.sh/version: 1.0.0
+    metadata.gatekeeper.sh/requires-sync-data: |
+      "[
+        [
+          {
+            "groups": ["cert-manager.io"],
+            "versions": ["v1"],
+            "kinds": ["ClusterIssuer"]
+          }
+        ]
+      ]"
+    description: Deny unauthorized ClusterIssuers in Certificate's spec.issuerRef.name
 spec:
   crd:
     spec:
