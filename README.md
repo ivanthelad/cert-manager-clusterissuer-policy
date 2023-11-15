@@ -6,6 +6,34 @@ To create an Azure Policy with a source type of Base64Encoded, you would first n
 base64 -i  tests/DenyClusterBasedOnAnnotationTemplate.yaml -o out.base64
 ```
 
+## Enable Azure Policy
+See https://learn.microsoft.com/en-us/azure/governance/policy/concepts/policy-for-kubernetes#install-azure-policy-add-on-for-aks
+
+## Deploy Policy 
+ Thze defintion for azure policy can be found under [here](/azurepolicy/clusterissuer.yaml)
+ this definition can be copied and pasted in the the azure policy UI and applied to the target scio 
+
+## ConstraintTemplate For Azure Policy  
+
+The metadata.gatekeeper.sh/requires-sync-data field is a special annotation used by Gatekeeper. This annotation tells Gatekeeper that this ConstraintTemplate requires certain Kubernetes resources to be synced for use in the Rego policies. The value of this field is a JSON-formatted string that specifies the group, version, and kind (GVK) of the resources to be synced.
+
+In this case, the GVK is cert-manager.io/v1/ClusterIssuer. This means that the ConstraintTemplate requires Gatekeeper to sync the ClusterIssuer resources from the cert-manager.io group and the v1 version. The synced resources can then be accessed in the Rego policies using the data.inventory document.
+```
+   metadata.gatekeeper.sh/requires-sync-data: |
+      "[
+        [
+          {
+            "groups": ["cert-manager.io"],
+            "versions": ["v1"],
+            "kinds": ["ClusterIssuer"]
+          }
+        ]
+      ]"
+```
+In this case, the GVK is cert-manager.io/v1/ClusterIssuer. This means that the ConstraintTemplate requires Gatekeeper to sync the ClusterIssuer resources from the cert-manager.io group and the v1 version. The synced resources can then be accessed in the Rego policies using the data.inventory document.
+In our policies case ClusterIssuer can be used accessed and checked the certifcate is allowe to reference it. 
+
+
 # install GK  and Test  
 
  installing the oss project as its quick to test rego deployments than via azure policy 
@@ -26,7 +54,7 @@ In this case, the syncOnly field contains a list with one item, which specifies 
 
 This configuration tells Gatekeeper to monitor ClusterIssuer resources from the cert-manager.io/v1 API group and use them for policy enforcement.
 
-## Deploy the Constraint template and the Constraint 
+## Deploy the Constraint template and the Constraint with a opensource Gatekeeper V3 
 The following deploys the rego rule that enforces which ClusterIssuers can be used 
 ```
 kube apply -f tests/DenyClusterBasedOnAnnotationTemplate.yaml
