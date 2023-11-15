@@ -7,5 +7,3 @@ spec:
     kinds:
       - apiGroups: ["cert-manager.io"]
         kinds: ["Certificate"]
-  parameters:
-    issuer: gatekeeper

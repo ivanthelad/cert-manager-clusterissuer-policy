@@ -7,11 +7,7 @@ spec:
     spec:
       names:
         kind: DenyClusterIssuerBasedOnAnnotation
-      validation:
-        openAPIV3Schema:
-          properties:
-            issuer:
-              type: string
+
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |

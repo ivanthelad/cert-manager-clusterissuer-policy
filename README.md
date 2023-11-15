@@ -1,5 +1,10 @@
 # cert-manager-clusterissuer-policy
 
+# Install azure policy 
+To create an Azure Policy with a source type of Base64Encoded, you would first need to decode the base64 content to get the actual policy definition.
+```
+base64 -i  tests/DenyClusterBasedOnAnnotationTemplate.yaml -o out.base64
+```
 
 # install GK  and Test  
 
@@ -170,12 +175,13 @@ contains(arr, val) {
     }
   }
 }
-````
+```
 
-## notes 
+## notes and Reference 
 * https://open-policy-agent.github.io/gatekeeper/website/docs/howto/#input-review
 * https://pkg.go.dev/k8s.io/kubernetes/pkg/apis/admission#AdmissionRequest
 * https://www.danielstechblog.io/evaluating-gatekeeper-policies-with-the-rego-playground/
 * https://github.com/Azure/azure-policy/tree/master/samples/KubernetesService
 * Rego example https://play.openpolicyagent.org/p/7O2UVOvrbN for checking data repo
 * https://github.com/open-policy-agent/gatekeeper-library/blob/master/library/general/poddisruptionbudget/template.yaml
+* https://github.com/clarenceb/aks-custom-policy-demo#
