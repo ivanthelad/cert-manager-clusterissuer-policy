@@ -1,10 +1,30 @@
 # cert-manager-clusterissuer-policy
 
-# Install azure policy 
-To create an Azure Policy with a source type of Base64Encoded, you would first need to decode the base64 content to get the actual policy definition.
-```
-base64 -i  tests/DenyClusterBasedOnAnnotationTemplate.yaml -o out.base64
-```
+This repo demostrates two implementations how to enforce a namespace in K8S to only a limited set of  clusterissuer. Theres two ConstraintTemplate defintions 
+ * (tests/DenyClusterBasedOnAnnotationTemplate.yaml):  Checks if Certificate's origin namespace is found in annotation "allowedNamespaces" of the the ClusterIssuer the certificate. If not found, this results in a violation. This only works on the opensource gatekeeper as today azure policy does not support using data-inventory caches `metadata.gatekeeper.sh/requires-sync-data`  
+ * (tests/DenyClusterBasedOnSimpleNameTemplate.yaml): Checks if certifcate is referencing a clusterissuer which has the naming convention. The expectation is the field  issuerRef.name =  "$Certificat-NS-clusterissuer". If its not the same then the policy fails. This works on opensource gatekeeper and azure policy
+
+
+## To Test in azure policy
+* Deploy Azure Policy to an aks cluster 
+* Create a new Policy Definition based on [defintion](/azurepolicy/clusterissuer.yaml)
+* Assign Policy to scope which includes the aks cluster 
+
+### Postive allow Test 
+ * Create a ns called `kubectl create ns ns-level2-dev-something`
+ * Deploy a Certificate `kube apply -f setup/selfsigned.certificate.yaml -n ns-level2-dev-something`
+ * this should be succesfully created 
+
+### Negative deny Test 
+ * Create a ns called `kubectl create ns ns-level2-dev-something`
+ *  modify setup/selfsigned.certificate.yaml file and update field `spec.issuerRef.name` to any string  
+ * Deploy a Certificate `kube apply -f setup/selfsigned.certificate.yaml -n ns-level2-dev-something`
+ * this should be denied created. With message  `Certificate with name [my-selfsigned-ca] in your namespace  [ns-level2-dev-something] does is attempting to use Issuer   [ns-level2-dev-something-clusffterissuer]. This certificate is only allowed to use  ClusterIssuer [ns-level2-dev-something-clusterissuer]`
+  
+  ![ ](/assets/deny.png)
+
+# Install Azure Policy 
+
 
 ## Enable Azure Policy
 See
@@ -96,9 +116,11 @@ In summary, this policy checks if a Certificate resource in the cert-manager.io 
 In our policies case ClusterIssuer can be used accessed and checked the certifcate is allowe to reference it.~~
 
 
-# install GK  and Test  
+# Install GK  and Test  
 
- installing the oss project as its quick to test rego deployments than via azure policy 
+***Note:  is only applicable if you want to test the  data-sync based approach on the OSS project***
+
+ Installing the oss project as its quick to test rego deployments than via azure policy. Testing time with Azure policy is excessive so it quicker to validate rego rules against a local cluster with GK installed  
  ```
  helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
  helm install gatekeeper/gatekeeper --name-template=gatekeeper --namespace gatekeeper-system --create-namespace
