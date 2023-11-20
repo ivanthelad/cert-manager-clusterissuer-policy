@@ -74,12 +74,12 @@ The details block contains more specific information about the policy:
 
 In summary, this policy checks if a Certificate resource in the cert-manager.io API group is being created or updated, and if the issuer of the Certificate is not the expected one, it triggers a violation. The policy applies to the resources in the specified namespaces and with the specified labels, except for the resources in the excluded namespaces.
 
+~~
+## ~~ConstraintTemplate For Azure Policy  using inventory Cache~~ 
 
-## ConstraintTemplate For Azure Policy  using inventory Cache 
+~~The metadata.gatekeeper.sh/requires-sync-data field is a special annotation used by Gatekeeper. This annotation tells Gatekeeper that this ConstraintTemplate requires certain Kubernetes resources to be synced for use in the Rego policies. The value of this field is a JSON-formatted string that specifies the group, version, and kind (GVK) of the resources to be synced.~~
 
-The metadata.gatekeeper.sh/requires-sync-data field is a special annotation used by Gatekeeper. This annotation tells Gatekeeper that this ConstraintTemplate requires certain Kubernetes resources to be synced for use in the Rego policies. The value of this field is a JSON-formatted string that specifies the group, version, and kind (GVK) of the resources to be synced.
-
-In this case, the GVK is cert-manager.io/v1/ClusterIssuer. This means that the ConstraintTemplate requires Gatekeeper to sync the ClusterIssuer resources from the cert-manager.io group and the v1 version. The synced resources can then be accessed in the Rego policies using the data.inventory document.
+~~In this case, the GVK is cert-manager.io/v1/ClusterIssuer. This means that the ConstraintTemplate requires Gatekeeper to sync the ClusterIssuer resources from the cert-manager.io group and the v1 version. The synced resources can then be accessed in the Rego policies using the data.inventory document.~~
 ```
    metadata.gatekeeper.sh/requires-sync-data: |
       "[
@@ -92,8 +92,8 @@ In this case, the GVK is cert-manager.io/v1/ClusterIssuer. This means that the C
         ]
       ]"
 ```
-In this case, the GVK is cert-manager.io/v1/ClusterIssuer. This means that the ConstraintTemplate requires Gatekeeper to sync the ClusterIssuer resources from the cert-manager.io group and the v1 version. The synced resources can then be accessed in the Rego policies using the data.inventory document.
-In our policies case ClusterIssuer can be used accessed and checked the certifcate is allowe to reference it. 
+~~In this case, the GVK is cert-manager.io/v1/ClusterIssuer. This means that the ConstraintTemplate requires Gatekeeper to sync the ClusterIssuer resources from the cert-manager.io group and the v1 version. The synced resources can then be accessed in the Rego policies using the data.inventory document.
+In our policies case ClusterIssuer can be used accessed and checked the certifcate is allowe to reference it.~~
 
 
 # install GK  and Test  
@@ -105,6 +105,7 @@ In our policies case ClusterIssuer can be used accessed and checked the certifca
 ```
 
 ## Configure Sync
+This only applies to the annotation based approach 
 
 ```
 kubectl apply -f setup/config.gk.yaml

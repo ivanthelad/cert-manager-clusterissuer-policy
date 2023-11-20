@@ -10,6 +10,6 @@ spec:
     algorithm: ECDSA
     size: 256
   issuerRef:
-    name: ns-level2-dev-something-sclusterissuer
+    name: ns-level2-dev-something-clusffterissuer
     kind: ClusterIssuer
     group: cert-manager.io
