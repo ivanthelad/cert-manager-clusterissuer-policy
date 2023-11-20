@@ -7,13 +7,75 @@ base64 -i  tests/DenyClusterBasedOnAnnotationTemplate.yaml -o out.base64
 ```
 
 ## Enable Azure Policy
-See https://learn.microsoft.com/en-us/azure/governance/policy/concepts/policy-for-kubernetes#install-azure-policy-add-on-for-aks
+See
+*  https://learn.microsoft.com/en-us/azure/governance/policy/concepts/policy-for-kubernetes#install-azure-policy-add-on-for-aks
 
 ## Deploy Policy 
  Thze defintion for azure policy can be found under [here](/azurepolicy/clusterissuer.yaml)
- this definition can be copied and pasted in the the azure policy UI and applied to the target scio 
+ this definition can be copied and pasted in the the azure policy UI and applied to the target. Simple go to Azure Policy -> Definitions-> new Defintions  
+ * Scope: 
+ * Name
+  * Description 
+  * Policy Rule: copy and paste the content  [under here](/azurepolicy/clusterissuer.yaml) to this field 
+![ ](/assets/addpolicy.png)
 
-## ConstraintTemplate For Azure Policy  
+This policy does not accept any custom paramaters. these can be added later. 
+
+### Base64  encodiong of template. 
+To policy has the template constraint added as abase64 encoded file instead of a remote file. if you make modifications be sure to update the base64 content in the field templateinfo.content 
+```
+base64 -i  tests/DenyClusterBasedOnSimpleNameTemplate.yaml -o out.base64
+```
+
+The contents from out.base64 can be copied directly to the field "content"
+
+###  Policy descriptions 
+The active selection is a part of a JSON configuration file, specifically for a Gatekeeper policy. Gatekeeper is a customizable admission webhook for Kubernetes that enforces policies executed by the Open Policy Agent (OPA), a policy engine for Cloud Native environments.
+```
+    "then": {
+      "effect": "[parameters('effect')]",
+      "details": {
+        "templateInfo": {
+          "sourceType": "Base64Encoded",
+          "content": "YXBpVmVyc2lvbjogdGVtxxxxxxgICAgCiAgICAgICA="
+        },
+        "apiGroups": [
+          "cert-manager.io"
+        ],
+        "kinds": [
+          "Certificate"
+        ],
+        "excludedNamespaces": "[parameters('excludedNamespaces')]",
+        "namespaces": "[parameters('namespaces')]",
+        "labelSelector": "[parameters('labelSelector')]"
+      }
+    }
+  },
+```
+
+
+The then block defines what actions should be taken when the conditions specified in the if block (not shown in the selection) are met.
+
+The effect field is set to the value of a parameter named effect. This parameter determines the effect of the policy, which could be deny, warn, or audit.
+
+The details block contains more specific information about the policy:
+
+* templateInfo specifies the source and content of the ConstraintTemplate that defines the policy. The sourceType is Base64Encoded, which means the content is a base64-encoded string representing a ConstraintTemplate in YAML format. This template includes a Rego policy that checks if a Certificate resource is being created or updated, and if the issuer of the Certificate is not the expected one, it triggers a violation.
+
+* apiGroups specifies the API groups that the policy applies to. In this case, it's cert-manager.io.
+
+* kinds specifies the kinds of resources that the policy applies to. In this case, it's Certificate.
+
+* excludedNamespaces is set to the value of a parameter named excludedNamespaces. This parameter specifies the namespaces that are excluded from the policy.
+
+* namespaces is set to the value of a parameter named namespaces. This parameter specifies the namespaces that the policy applies to.
+
+ * labelSelector is set to the value of a parameter named labelSelector. This parameter specifies the labels of the resources that the policy applies to.
+
+In summary, this policy checks if a Certificate resource in the cert-manager.io API group is being created or updated, and if the issuer of the Certificate is not the expected one, it triggers a violation. The policy applies to the resources in the specified namespaces and with the specified labels, except for the resources in the excluded namespaces.
+
+
+## ConstraintTemplate For Azure Policy  using inventory Cache 
 
 The metadata.gatekeeper.sh/requires-sync-data field is a special annotation used by Gatekeeper. This annotation tells Gatekeeper that this ConstraintTemplate requires certain Kubernetes resources to be synced for use in the Rego policies. The value of this field is a JSON-formatted string that specifies the group, version, and kind (GVK) of the resources to be synced.
 

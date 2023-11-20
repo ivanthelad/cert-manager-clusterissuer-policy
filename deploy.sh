@@ -10,7 +10,7 @@ VM_SIZE=Standard_D4s_v3
 #!/bin/bash
 PREFIX='gep'
 
-SUFFIX='pol1'
+SUFFIX='pol2'
 
 RGNAME="${PREFIX}-k8s-${SUFFIX}-rg"
 RESOURCE_GROUP=$RGNAME
@@ -123,9 +123,14 @@ helm install \
 
 echo "cert manager installed" 
 
+#echo " installing gk controller"
+#helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
+#helm install gatekeeper/gatekeeper --name-template=gatekeeper --namespace gatekeeper-system --create-namespace
+#echo "gk controller installed"
+
  mcResourceGroupId=$(az group show --name $RGNAME-managed  --query id -o tsv)
 
-
+exit
 ## Grafana 
 az grafana create \
 --name $GRAFANA_NAME \

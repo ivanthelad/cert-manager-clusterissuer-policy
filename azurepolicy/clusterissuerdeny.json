@@ -1,137 +1,128 @@
 {
-    "properties": {
-      "displayName": "Allow ClusterIssuers basedon annotations",
-      "policyType": "Custom",
-      "mode": "Microsoft.Kubernetes.Data",
-      "description": "Allow ClusterIssuers basedon annotations",
-        "metadata": {
-            "version": "1.0.0",
-            "category": "Kubernetes"
+  "mode": "Microsoft.Kubernetes.Data",
+  "policyRule": {
+    "if": {
+      "field": "type",
+      "in": [
+        "Microsoft.ContainerService/managedClusters"
+      ]
+    },
+    "then": {
+      "effect": "[parameters('effect')]",
+      "details": {
+        "templateInfo": {
+          "sourceType": "Base64Encoded",
+          "content": "YXBpVmVyc2lvbjogdGVtcGxhdGVzLmdhdGVrZWVwZXIuc2gvdjFiZXRhMQpraW5kOiBDb25zdHJhaW50VGVtcGxhdGUKbWV0YWRhdGE6CiAgbmFtZTogZGVueWNsdXN0ZXJpc3N1ZXIKICBhbm5vdGF0aW9uczoKICAgIG1ldGFkYXRhLmdhdGVrZWVwZXIuc2gvdGl0bGU6ICJQcmV2ZW50IG90aGVyIGNsdXN0ZXIgaXNzdWVycyBmcm9tIGJlaW5nIHVzZWQiCiAgICAKc3BlYzoKICBjcmQ6CiAgICBzcGVjOgogICAgICBuYW1lczoKICAgICAgICBraW5kOiBEZW55Q2x1c3Rlcklzc3VlcgoKICB0YXJnZXRzOgogICAgLSB0YXJnZXQ6IGFkbWlzc2lvbi5rOHMuZ2F0ZWtlZXBlci5zaAogICAgICByZWdvOiB8CgogICAgICAgIHBhY2thZ2UgZGVueWNsdXN0ZXJpc3N1ZXIKICAgICAgICBhbGxvdyBbbXNnXSB7CiAgICAgICAgICBpbnB1dC5yZXF1ZXN0LmtpbmQua2luZCA9PSAiQ2VydGlmaWNhdGUiCiAgICAgICAgICBpbnB1dC5yZXF1ZXN0LmtpbmQuZ3JvdXAgPT0gImNlcnQtbWFuYWdlci5pbyIKICAgICAgICAgICAgCiAgICAgICAgICB2YWxpZF9vcGVyYXRpb25zIDo9IHsiQ1JFQVRFIiwgIlVQREFURSJ9CgogICAgICAgICAgdmFsaWRfb3BlcmF0aW9uc1tpbnB1dC5yZXF1ZXN0Lm9wZXJhdGlvbl0KICAgICAgICAgIGlucHV0LnJlcXVlc3QucmVzb3VyY2Uua2luZCA9PSAiQ2VydGlmaWNhdGUiCiAgICAgICAgICBpbnB1dC5yZXF1ZXN0LnJlc291cmNlLmdyb3VwID09ICJjZXJ0LW1hbmFnZXIuaW8iCiAgICAgICAgICBtc2cgOj0gc3ByaW50ZigiaW52YWxpZCByZXF1ZXN0IHRvIHVwZGF0ZSBvciBjcmVhdGUgQ2VydGlmY2F0ZTogWyV2XSIsIFtpbnB1dC5yZXF1ZXN0XSkKCiAgICAgICAgfQoKCiAgICAgICAgZ2V0X3Zpb2xhdGlvbl9tZXNzYWdlKGlzc3VlciwgcmV2aWV3KSA9IG1zZyB7CiAgICAgICAgICAgIG1zZyA6PSBzcHJpbnRmKCIgQ2VydGlmaWNhdGUgd2l0aCBuYW1lIFsldl0gaW4geW91ciBuYW1lc3BhY2UgIFsldl0gZG9lcyBpcyBhdHRlbXB0aW5nIHRvIHVzZSBJc3N1ZXIgICBbJXZdLiBUaGlzIGNlcnRpZmljYXRlIGlzIG9ubHkgYWxsb3dlZCB0byB1c2UgIENsdXN0ZXJJc3N1ZXIgWyV2LWNsdXN0ZXJpc3N1ZXJdIiwgW3Jldmlldy5vYmplY3QubWV0YWRhdGEubmFtZSwgcmV2aWV3Lm9iamVjdC5tZXRhZGF0YS5uYW1lc3BhY2UsIGlzc3VlciwgcmV2aWV3Lm9iamVjdC5tZXRhZGF0YS5uYW1lc3BhY2VdKQogICAgICAgIH0KICAgICAgICB2aW9sYXRpb25beyJtc2ciOiBtc2d9XSB7CiAgICAKICAgICAgICAgIGNlcnQgOj0gaW5wdXQucmV2aWV3Lm9iamVjdAogICAgICAgICAgaXNzdWVyIDo9IGNlcnQuc3BlYy5pc3N1ZXJSZWYubmFtZQogICAgICAgICAgaXNzdWVyX2tpbmQgOj0gY2VydC5zcGVjLmlzc3VlclJlZi5raW5kCiAgICAgICAgICBuYW1lc3BhY2UgOj0gY2VydC5tZXRhZGF0YS5uYW1lc3BhY2UKICAgICAgICAgIGlzc3Vlcl9ncm91cCA6PSBjZXJ0LnNwZWMuaXNzdWVyUmVmLmdyb3VwCiAgICAgICAgICBpc3N1ZXIgIT0gc3ByaW50ZigiJXMtY2x1c3Rlcmlzc3VlciIsIFtuYW1lc3BhY2VdKQogICAgICAgICAgbXNnIDo9IGdldF92aW9sYXRpb25fbWVzc2FnZShpc3N1ZXIsIGlucHV0LnJldmlldykKICAgICAgICB9CgoKCgogICAgICAgCiAgICAgICA="
         },
-      "parameters": {
-        "effect": {
-          "type": "String",
-          "metadata": {
-            "displayName": "Effect",
-            "description": "'Audit' allows a non-compliant resource to be created, but flags it as non-compliant. 'Deny' blocks the resource creation. 'Disable' turns off the policy.",
-            "portalReview": true
-          },
-          "allowedValues": [
-            "audit",
-            "Audit",
-            "deny",
-            "Deny",
-            "disabled",
-            "Disabled"
-          ],
-          "defaultValue": "Deny"
-        },
-        "excludedNamespaces": {
-          "type": "Array",
-          "metadata": {
-            "displayName": "Namespace exclusions",
-            "description": "List of Kubernetes namespaces to exclude from policy evaluation. System namespaces \"kube-system\", \"gatekeeper-system\" and \"azure-arc\" are always excluded by design. \"azure-extensions-usage-system\" is optional to remove."
-          },
-          "defaultValue": [
-            "kube-system",
-            "gatekeeper-system",
-            "azure-arc",
-            "azure-extensions-usage-system"
-          ]
-        },
-        "namespaces": {
-          "type": "Array",
-          "metadata": {
-            "displayName": "Namespace inclusions",
-            "description": "List of Kubernetes namespaces to only include in policy evaluation. An empty list means the policy is applied to all resources in all namespaces."
-          },
-          "defaultValue": []
-        },
-        "labelSelector": {
-          "type": "Object",
-          "metadata": {
-            "displayName": "Kubernetes label selector",
-            "description": "Label query to select Kubernetes resources for policy evaluation. An empty label selector matches all Kubernetes resources."
-          },
-          "defaultValue": {},
-          "schema": {
-            "description": "A label selector is a label query over a set of resources. The result of matchLabels and matchExpressions are ANDed. An empty label selector matches all resources.",
+        "apiGroups": [
+          "cert-manager.io"
+        ],
+        "kinds": [
+          "Certificate"
+        ],
+        "excludedNamespaces": "[parameters('excludedNamespaces')]",
+        "namespaces": "[parameters('namespaces')]",
+        "labelSelector": "[parameters('labelSelector')]"
+      }
+    }
+  },
+  "parameters": {
+    "effect": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Effect",
+        "description": "'Audit' allows a non-compliant resource to be created, but flags it as non-compliant. 'Deny' blocks the resource creation. 'Disable' turns off the policy.",
+        "portalReview": true
+      },
+      "allowedValues": [
+        "audit",
+        "Audit",
+        "deny",
+        "Deny",
+        "disabled",
+        "Disabled"
+      ],
+      "defaultValue": "Deny"
+    },
+    "excludedNamespaces": {
+      "type": "Array",
+      "metadata": {
+        "displayName": "Namespace exclusions",
+        "description": "List of Kubernetes namespaces to exclude from policy evaluation. System namespaces \"kube-system\", \"gatekeeper-system\" and \"azure-arc\" are always excluded by design. \"azure-extensions-usage-system\" is optional to remove."
+      },
+      "defaultValue": [
+        "kube-system",
+        "gatekeeper-system",
+        "azure-arc",
+        "azure-extensions-usage-system"
+      ]
+    },
+    "namespaces": {
+      "type": "Array",
+      "metadata": {
+        "displayName": "Namespace inclusions",
+        "description": "List of Kubernetes namespaces to only include in policy evaluation. An empty list means the policy is applied to all resources in all namespaces."
+      },
+      "defaultValue": []
+    },
+    "labelSelector": {
+      "type": "Object",
+      "metadata": {
+        "displayName": "Kubernetes label selector",
+        "description": "Label query to select Kubernetes resources for policy evaluation. An empty label selector matches all Kubernetes resources."
+      },
+      "defaultValue": {},
+      "schema": {
+        "description": "A label selector is a label query over a set of resources. The result of matchLabels and matchExpressions are ANDed. An empty label selector matches all resources.",
+        "type": "object",
+        "properties": {
+          "matchLabels": {
+            "description": "matchLabels is a map of {key,value} pairs.",
             "type": "object",
-            "properties": {
-              "matchLabels": {
-                "description": "matchLabels is a map of {key,value} pairs.",
-                "type": "object",
-                "additionalProperties": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "minProperties": 1
+          },
+          "matchExpressions": {
+            "description": "matchExpressions is a list of values, a key, and an operator.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "description": "key is the label key that the selector applies to.",
                   "type": "string"
                 },
-                "minProperties": 1
-              },
-              "matchExpressions": {
-                "description": "matchExpressions is a list of values, a key, and an operator.",
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "key": {
-                      "description": "key is the label key that the selector applies to.",
-                      "type": "string"
-                    },
-                    "operator": {
-                      "description": "operator represents a key's relationship to a set of values.",
-                      "type": "string",
-                      "enum": [
-                        "In",
-                        "NotIn",
-                        "Exists",
-                        "DoesNotExist"
-                      ]
-                    },
-                    "values": {
-                      "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty.",
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "required": [
-                    "key",
-                    "operator"
-                  ],
-                  "additionalProperties": false
+                "operator": {
+                  "description": "operator represents a key's relationship to a set of values.",
+                  "type": "string",
+                  "enum": [
+                    "In",
+                    "NotIn",
+                    "Exists",
+                    "DoesNotExist"
+                  ]
                 },
-                "minItems": 1
-              }
+                "values": {
+                  "description": "values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "key",
+                "operator"
+              ],
+              "additionalProperties": false
             },
-            "additionalProperties": false
+            "minItems": 1
           }
-        }
-      },
-      "policyRule": {
-        "if": {
-          "field": "type",
-          "in": [
-            "Microsoft.ContainerService/managedClusters"
-          ]
         },
-        "then": {
-          "effect": "[parameters('effect')]",
-          "details": {
-            "templateInfo": {
-              "sourceType": "Base64Encoded",
-              "content": "YXBpVmVyc2lvbjogdGVtcGxhdGVzLmdhdGVrZWVwZXIuc2gvdjFiZXRhMQpraW5kOiBDb25zdHJhaW50VGVtcGxhdGUKbWV0YWRhdGE6CiAgbmFtZTogZGVueWNsdXN0ZXJpc3N1ZXJiYXNlZG9uYW5ub3RhdGlvbgogIGFubm90YXRpb25zOgogICAgbWV0YWRhdGEuZ2F0ZWtlZXBlci5zaC90aXRsZTogIkRlbnkgdW5hdXRob3JpemVkIENsdXN0ZXJJc3N1ZXJzIgogICAgbWV0YWRhdGEuZ2F0ZWtlZXBlci5zaC92ZXJzaW9uOiAxLjEuMQogICAgbWV0YWRhdGEuZ2F0ZWtlZXBlci5zaC9yZXF1aXJlcy1zeW5jLWRhdGE6IHwKICAgICAgIlsKICAgICAgICBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJncm91cHMiOiBbImNlcnQtbWFuYWdlci5pbyJdLAogICAgICAgICAgICAidmVyc2lvbnMiOiBbInYxIl0sCiAgICAgICAgICAgICJraW5kcyI6IFsiQ2x1c3Rlcklzc3VlciJdCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICBdIgogICAgZGVzY3JpcHRpb246ICJEZW55IHVuYXV0aG9yaXplZCBDbHVzdGVySXNzdWVycyBpbiBDZXJ0aWZpY2F0ZSdzIHNwZWMuaXNzdWVyUmVmLm5hbWUiCnNwZWM6CiAgY3JkOgogICAgc3BlYzoKICAgICAgbmFtZXM6CiAgICAgICAga2luZDogRGVueUNsdXN0ZXJJc3N1ZXJCYXNlZE9uQW5ub3RhdGlvbgoKICB0YXJnZXRzOgogICAgLSB0YXJnZXQ6IGFkbWlzc2lvbi5rOHMuZ2F0ZWtlZXBlci5zaAogICAgICByZWdvOiB8CiAgICAgICAgcGFja2FnZSBrOHNkZW55Y2x1c3Rlcmlzc3VlcgoKICAgICAgICB2aW9sYXRpb25beyJtc2ciOiBtc2csICJkZXRhaWxzIjogeyJpc3N1ZXJfbmFtZSI6IGlzc3Vlcl9uYW1lLCAiYWxsb3dlZF9uYW1lc3BhY2VzIjogYWxsb3dlZE5hbWVzcGFjZXN9fV0gewogICAgICAgICAgaW5wdXQucmV2aWV3LmtpbmQua2luZCA9PSAiQ2VydGlmaWNhdGUiCiAgICAgICAgICBpc3N1ZXJfbmFtZSA6PSBpbnB1dC5yZXZpZXcub2JqZWN0LnNwZWMuaXNzdWVyUmVmLm5hbWUKICAgICAgICAgIG5zIDo9IGlucHV0LnJldmlldy5vYmplY3QubWV0YWRhdGEubmFtZXNwYWNlCgogICAgICAgICAgY2kgOj0gZGF0YS5pbnZlbnRvcnkuY2x1c3RlclsiY2VydC1tYW5hZ2VyLmlvL3YxIl1bIkNsdXN0ZXJJc3N1ZXIiXVtpc3N1ZXJfbmFtZV0KICAgICAgICAgIGFubm90YXRpb25zIDo9IGNpLm1ldGFkYXRhLmFubm90YXRpb25zCiAgICAgICAgICBhbGxvd2VkTmFtZXNwYWNlcyA6PSBqc29uLnVubWFyc2hhbChhbm5vdGF0aW9ucy5hbGxvd2VkTmFtZXNwYWNlcykKCiAgICAgICAgICAjI25vdCBpc3N1ZXJfbmFtZSAhPSBhbGxvd2VkTmFtZXNwYWNlc1tfXQogICAgICAgICAgIyMgdGhpcyB3aWxsIGJlIHRydWUgaW5kaWNhdGluZyBhIHZpb2xhdGlvbiAKICAgICAgICAgIG5vdCBjb250YWlucyhhbGxvd2VkTmFtZXNwYWNlcywgbnMpCgogICAgICAgICAgbXNnIDo9IHNwcmludGYoIklzc3VlciBuYW1lICV2IGlzIG5vdCBhbGxvd2VkIGluIENsdXN0ZXJJc3N1ZXIncyBhbm5vdGF0aW9ucyIsIFtpc3N1ZXJfbmFtZV0pCiAgICAgICAgfQogICAgICAgICMgSGVscGVyIGZ1bmN0aW9uIHRvIGNoZWNrIGlmIGFuIGFycmF5IGNvbnRhaW5zIGEgdmFsdWUKICAgICAgICBjb250YWlucyhhcnIsIHZhbCkgewogICAgICAgICAgYXJyW19dID09IHZhbAogICAgICAgIH0K"
-            },
-            "apiGroups": [
-              "cert-manager.io"
-            ],
-            "kinds": [
-              "Certificate"
-            ],
-            "excludedNamespaces": "[parameters('excludedNamespaces')]",
-            "namespaces": "[parameters('namespaces')]",
-            "labelSelector": "[parameters('labelSelector')]"
-          }
-        }
+        "additionalProperties": false
       }
     }
   }
+}

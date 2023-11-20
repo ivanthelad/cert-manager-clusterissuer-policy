@@ -6,3 +6,17 @@ metadata:
     allowedNamespaces: '["default2", "argo", "temp"]'
 spec:
   selfSigned: {}
+--- 
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: temp-clusterissuer
+spec:
+  selfSigned: {}
+--- 
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: ns-level2-dev-something-clusterissuer
+spec:
+  selfSigned: {}

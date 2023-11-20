@@ -125,3 +125,5 @@ fabric.properties
 aks-ingress-tls.crt
 aks-ingress-tls.key
 aks-ingress-tls.pfx
+
+out.base64

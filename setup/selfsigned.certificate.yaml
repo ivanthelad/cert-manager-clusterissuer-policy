@@ -5,11 +5,11 @@ metadata:
 spec:
   isCA: true
   commonName: my-selfsigned-ca
-  secretName: root-secret
+  secretName: root-secret2
   privateKey:
     algorithm: ECDSA
     size: 256
   issuerRef:
-    name: selfsigned-cluster-issuer
+    name: ns-level2-dev-something-sclusterissuer
     kind: ClusterIssuer
     group: cert-manager.io

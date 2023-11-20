@@ -1,4 +1,4 @@
-apiVersion: templates.gatekeeper.sh/v1
+apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
   name: denyclusterissuer
@@ -10,42 +10,38 @@ spec:
     spec:
       names:
         kind: DenyClusterIssuer
-      validation:
-        openAPIV3Schema:
-          type: object
-          properties:
-            message:
-              type: string
-
 
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
 
         package denyclusterissuer
-        allow {
+        allow [msg] {
           input.request.kind.kind == "Certificate"
           input.request.kind.group == "cert-manager.io"
-          input.request.operation == "CREATE"
+            
+          valid_operations := {"CREATE", "UPDATE"}
+
+          valid_operations[input.request.operation]
           input.request.resource.kind == "Certificate"
           input.request.resource.group == "cert-manager.io"
-          input.request.resource.namespace == "default"
-          input.request.resource.apiVersion == "cert-manager.io/v1"
-          input.request.resource.name == "selfsigned-cluster-issuer"
+          msg := sprintf("invalid request to update or create Certifcate: [%v]", [input.request])
+
         }
 
+
         get_violation_message(issuer, review) = msg {
-            msg := sprintf("Certificate  <%v> in your <%v> does not user the right issuer <%v> ", [review.object.metadata.name, review.object.metadata.namespace, issuer])
+            msg := sprintf(" Certificate with name [%v] in your namespace  [%v] does is attempting to use Issuer   [%v]. This certificate is only allowed to use  ClusterIssuer [%v-clusterissuer]", [review.object.metadata.name, review.object.metadata.namespace, issuer, review.object.metadata.namespace])
         }
         violation[{"msg": msg}] {
+    
           cert := input.review.object
           issuer := cert.spec.issuerRef.name
           issuer_kind := cert.spec.issuerRef.kind
-
+          namespace := cert.metadata.namespace
           issuer_group := cert.spec.issuerRef.group
-          issuer != "selfsigned-cluster-issuer"
+          issuer != sprintf("%s-clusterissuer", [namespace])
           msg := get_violation_message(issuer, input.review)
-
         }
 
 
