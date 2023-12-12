@@ -293,9 +293,15 @@ contains(arr, val) {
 ## notes and Reference 
 * https://open-policy-agent.github.io/gatekeeper/website/docs/howto/#input-review
 * https://pkg.go.dev/k8s.io/kubernetes/pkg/apis/admission#AdmissionRequest
+* By default GK sets the obj AdmissionRevew on the variable 'review' thats passed to the rego rule 
+
 * https://www.danielstechblog.io/evaluating-gatekeeper-policies-with-the-rego-playground/
 * https://github.com/Azure/azure-policy/tree/master/samples/KubernetesService
 * Rego example https://play.openpolicyagent.org/p/7O2UVOvrbN for checking data repo
 * https://github.com/open-policy-agent/gatekeeper-library/blob/master/library/general/poddisruptionbudget/template.yaml
 * https://github.com/clarenceb/aks-custom-policy-demo#
 * https://github.com/open-policy-agent/gatekeeper-library
+# debuging and viewing the admissionReview object
+*  enable this policy 😊. This will show the admissionReview objects hitting the GK controller
+* * https://open-policy-agent.github.io/gatekeeper/website/docs/debug#viewing-the-request-object
+*  View the audit log in AKS. This will show all objects in hitting the api admission controllers. Generates a lot of logs and costs 

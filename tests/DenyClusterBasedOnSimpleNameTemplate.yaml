@@ -17,15 +17,14 @@ spec:
 
         package denyclusterissuer
         allow [msg] {
-          input.request.kind.kind == "Certificate"
-          input.request.kind.group == "cert-manager.io"
+          input.review.kind.kind == "Certificate"
+          input.review.kind.group == "cert-manager.io"
             
           valid_operations := {"CREATE", "UPDATE"}
 
-          valid_operations[input.request.operation]
-          input.request.resource.kind == "Certificate"
-          input.request.resource.group == "cert-manager.io"
-          msg := sprintf("invalid request to update or create Certifcate: [%v]", [input.request])
+          valid_operations[input.review.operation]
+  
+          msg := sprintf("invalid request to update or create Certifcate: [%v]", [input.review])
 
         }
 

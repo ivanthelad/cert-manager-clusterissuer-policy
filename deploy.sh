@@ -8,9 +8,9 @@ VM_SIZE=Standard_D4s_v3
 
 
 #!/bin/bash
-PREFIX='gep'
+PREFIX='clu'
 
-SUFFIX='pol2'
+SUFFIX='mon1'
 
 RGNAME="${PREFIX}-k8s-${SUFFIX}-rg"
 RESOURCE_GROUP=$RGNAME
@@ -30,6 +30,7 @@ dnszone="${PREFIX}${SUFFIX}zone.com"
 certifcatename="aks-ingress-tls"
 IDENTITY_RESOURCE_NAME="${PREFIX}${SUFFIX}-alb-identity"
 
+LAWORKSPACENAME="${PREFIX}${SUFFIX}ala"
 az group create --name $RGNAME --location $LOCATION
 
  az identity create -n  $AKS_IDENTITY_NAME -g $RGNAME -l $LOCATION 
@@ -91,9 +92,18 @@ openssl pkcs12 -export -in aks-ingress-tls.crt -inkey aks-ingress-tls.key -out a
 az keyvault certificate import --vault-name $KVNAME -n $certifcatename -f aks-ingress-tls.pfx 
 az network dns zone create -g $RGNAME -n $dnszone
 
+echo creating log analytics
+az monitor log-analytics workspace create --resource-group $RGNAME   --workspace-name $LAWORKSPACENAME
+
+# extract the log workspace id
+echo getting log analytics workspace id
+LAWORKSPACEID=$(az monitor log-analytics workspace show --resource-group $RGNAME --workspace-name $LAWORKSPACENAME --query id -o tsv)
+echo $LAWORKSPACEID
+
 zonid=$(az network dns zone show  --name $dnszone -g $RGNAME --query id -o tsv)
 az aks create -g $RGNAME -n $AKSCLUSTERNAME  --enable-managed-identity --node-count 3 --enable-addons monitoring --generate-ssh-keys \
- --enable-addons monitoring,azure-keyvault-secrets-provider,azure-policy \
+ --enable-addons monitoring,azure-keyvault-secrets-provider \
+ --workspace-resource-id $LAWORKSPACEID \
  --nodepool-name="basepool" \
  --node-count 3 \
  --zones 1 2 3 \
@@ -107,9 +117,9 @@ az aks create -g $RGNAME -n $AKSCLUSTERNAME  --enable-managed-identity --node-co
  --kubernetes-version $VERSION \
  --node-vm-size=$VM_SIZE \
  --node-os-upgrade-channel SecurityPatch \
- --enable-network-observability --enable-oidc-issuer --enable-workload-identity --enable-secret-rotation     
+ --enable-oidc-issuer --enable-workload-identity --enable-secret-rotation     
 az aks get-credentials --resource-group $RGNAME --name $AKSCLUSTERNAME
-
+exit 
  echo " installing cert manager" 
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
